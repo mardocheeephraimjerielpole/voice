@@ -1,0 +1,71 @@
+#!/bin/bash
+
+# Script de déploiement automatique pour VoiceControl Pro
+
+echo "🚀 Déploiement de VoiceControl Pro..."
+
+# Variables
+PROJECT_NAME="voicecontrol-pro"
+BACKEND_DIR="./backend"
+WEB_DIR="./web"
+MOBILE_DIR="./mobile"
+
+# 1. Vérifier les dépendances
+echo "📦 Vérification des dépendances..."
+command -v node >/dev/null 2>&1 || { echo "❌ Node.js requis"; exit 1; }
+command -v npm >/dev/null 2>&1 || { echo "❌ npm requis"; exit 1; }
+command -v docker >/dev/null 2>&1 || { echo "⚠️ Docker recommandé"; }
+
+# 2. Installer les dépendances backend
+echo "🔧 Installation backend..."
+cd $BACKEND_DIR
+npm ci --production
+cd ..
+
+# 3. Build version web
+echo "🌐 Build version web..."
+cd $WEB_DIR
+# Minifier les fichiers
+if command -v uglifyjs >/dev/null 2>&1; then
+    uglifyjs script.js -o script.min.js
+    mv script.min.js script.js
+fi
+cd ..
+
+# 4. Build version mobile (Android)
+echo "📱 Build version mobile Android..."
+cd $MOBILE_DIR
+if [ -f "package.json" ]; then
+    npm ci
+    if command -v react-native >/dev/null 2>&1; then
+        react-native bundle --platform android --dev false \
+            --entry-file index.js \
+            --bundle-output android/app/src/main/assets/index.android.bundle \
+            --assets-dest android/app/src/main/res
+    fi
+fi
+cd ..
+
+# 5. Déployer avec Docker (optionnel)
+if [ "$1" == "--docker" ]; then
+    echo "🐳 Déploiement avec Docker..."
+    docker-compose up -d --build
+    echo "✅ Déploiement Docker terminé"
+fi
+
+# 6. Démarrer les services
+echo "⚡ Démarrage des services..."
+cd $BACKEND_DIR
+pm2 start server.js --name "$PROJECT_NAME-backend" || node server.js &
+
+echo "🎉 Déploiement terminé !"
+echo ""
+echo "📋 Accès aux services:"
+echo "   - Backend API: http://localhost:3000"
+echo "   - Web Interface: http://localhost:3000/web"
+echo "   - Documentation: http://localhost:3000/docs"
+echo ""
+echo "🔧 Commandes utiles:"
+echo "   - Arrêter: pm2 stop $PROJECT_NAME-backend"
+echo "   - Redémarrer: pm2 restart $PROJECT_NAME-backend"
+echo "   - Logs: pm2 logs $PROJECT_NAME-backend"

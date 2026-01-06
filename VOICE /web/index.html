@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VoiceControl Pro - Contrôle Vocal Total</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- OVERLAY DE PRISE DE CONTRÔLE -->
+    <div id="controlOverlay">
+        <div class="logo" style="margin-bottom: 30px;">
+            <i class="fas fa-microphone-alt logo-icon"></i>
+            <span class="logo-text">VoiceControl Pro</span>
+        </div>
+        
+        <div class="mic-container">
+            <div class="mic-button" id="initMicButton">
+                <i class="fas fa-microphone"></i>
+            </div>
+        </div>
+        
+        <div class="status-text" id="initStatus">
+            Initialisation du contrôle vocal...
+        </div>
+        
+        <div style="margin-top: 40px; text-align: center; max-width: 400px;">
+            <p style="color: #a0a0c0; margin-bottom: 20px;">
+                VoiceControl va maintenant prendre le contrôle de votre appareil pour vous permettre de tout contrôler par la voix.
+            </p>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <div style="width: 10px; height: 10px; border-radius: 50%; background: #00d4ff; animation: pulse 1s infinite;"></div>
+                <div style="width: 10px; height: 10px; border-radius: 50%; background: #00d4ff; animation: pulse 1s infinite 0.2s;"></div>
+                <div style="width: 10px; height: 10px; border-radius: 50%; background: #00d4ff; animation: pulse 1s infinite 0.4s;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- INTERFACE PRINCIPALE -->
+    <div class="app-container" id="appInterface">
+        <!-- En-tête -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-microphone-alt logo-icon"></i>
+                <span class="logo-text">VoiceControl Pro</span>
+            </div>
+            
+            <div class="status-indicator">
+                <div class="status-dot" id="statusDot"></div>
+                <span id="connectionStatus">Contrôle actif</span>
+            </div>
+        </header>
+
+        <!-- Contenu principal -->
+        <main class="main-content" id="mainContent">
+            <div class="voice-control-section">
+                <div class="mic-container">
+                    <button class="mic-button" id="micButton">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <div class="pulse-ring" id="pulseRing"></div>
+                </div>
+                <div class="status-text" id="statusText">
+                    Appuyez sur le microphone pour parler
+                </div>
+            </div>
+
+            <!-- Commandes rapides -->
+            <div class="quick-commands">
+                <div class="command-btn" data-command="cliquer ici">
+                    <i class="fas fa-mouse-pointer"></i>
+                    <span>Cliquer ici</span>
+                </div>
+                <div class="command-btn" data-command="revenir en arrière">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Retour</span>
+                </div>
+                <div class="command-btn" data-command="accueil">
+                    <i class="fas fa-home"></i>
+                    <span>Accueil</span>
+                </div>
+                <div class="command-btn" data-command="défiler vers le bas">
+                    <i class="fas fa-arrow-down"></i>
+                    <span>Défiler vers le bas</span>
+                </div>
+                <div class="command-btn" data-command="défiler vers le haut">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>Défiler vers le haut</span>
+                </div>
+                <div class="command-btn" data-command="ok voice présente toi">
+                    <i class="fas fa-robot"></i>
+                    <span>Présentation</span>
+                </div>
+                <div class="command-btn" data-command="ok voice ouvre zoom">
+                    <i class="fas fa-video"></i>
+                    <span>Ouvrir Zoom</span>
+                </div>
+                <div class="command-btn" data-command="ok voice organise une réunion">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Réunion</span>
+                </div>
+                <div class="command-btn" data-command="ok voice test fonctionnalités">
+                    <i class="fas fa-vial"></i>
+                    <span>Test Fonctions</span>
+                </div>
+                <div class="command-btn" data-command="ok voice prends le contrôle">
+                    <i class="fas fa-gamepad"></i>
+                    <span>Prendre contrôle</span>
+                </div>
+                <div class="command-btn" data-command="ouvrir mail">
+                    <i class="fas fa-envelope"></i>
+                    <span>Mail</span>
+                </div>
+                <div class="command-btn" data-command="paramètres">
+                    <i class="fas fa-cog"></i>
+                    <span>Paramètres</span>
+                </div>
+            </div>
+
+            <!-- Feedback visuel -->
+            <div class="visual-feedback" id="visualFeedback">
+                <span id="feedbackText"></span>
+            </div>
+
+            <!-- Mode contrôle avancé -->
+            <div class="control-mode" id="controlMode">
+                <div class="control-mode-header">
+                    <i class="fas fa-gamepad"></i>
+                    <h3>Mode Contrôle Avancé</h3>
+                </div>
+                <div class="control-grid">
+                    <div class="control-item" data-action="mouse-move">
+                        <i class="fas fa-arrows-alt"></i>
+                        <span>Contrôler souris</span>
+                    </div>
+                    <div class="control-item" data-action="keyboard">
+                        <i class="fas fa-keyboard"></i>
+                        <span>Clavier virtuel</span>
+                    </div>
+                    <div class="control-item" data-action="screenshot">
+                        <i class="fas fa-camera"></i>
+                        <span>Capture écran</span>
+                    </div>
+                    <div class="control-item" data-action="task-manager">
+                        <i class="fas fa-tasks"></i>
+                        <span>Gestionnaire tâches</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Barre de contrôle fixe -->
+        <div class="control-bar">
+            <button class="control-btn active" id="homeBtn" title="Accueil">
+                <i class="fas fa-home"></i>
+            </button>
+            <button class="control-btn" id="historyBtn" title="Historique">
+                <i class="fas fa-history"></i>
+                <div class="notification-badge" id="historyBadge"></div>
+            </button>
+            <button class="control-btn" id="testBtn" title="Tests">
+                <i class="fas fa-vial"></i>
+            </button>
+            <button class="control-btn" id="controlBtn" title="Contrôle avancé">
+                <i class="fas fa-gamepad"></i>
+            </button>
+            <button class="control-btn" id="settingsBtn" title="Paramètres">
+                <i class="fas fa-cog"></i>
+            </button>
+            <button class="control-btn" id="powerBtn" title="Éteindre">
+                <i class="fas fa-power-off"></i>
+            </button>
+        </div>
+
+        <!-- Historique des commandes -->
+        <div class="command-history" id="commandHistory">
+            <div class="history-header">
+                <h3><i class="fas fa-history"></i> Historique</h3>
+                <button class="close-history" id="closeHistory">&times;</button>
+            </div>
+            <div id="historyList"></div>
+        </div>
+
+        <!-- Panneau de test dédié -->
+        <div class="test-panel" id="testPanel">
+            <div class="test-header">
+                <h3><i class="fas fa-vial"></i> Test des Fonctionnalités</h3>
+                <button class="close-test" id="closeTestPanel">&times;</button>
+            </div>
+            
+            <div class="test-controls">
+                <button class="test-btn" data-test="introduce">
+                    <i class="fas fa-robot"></i>
+                    <span>Se présenter</span>
+                </button>
+                
+                <button class="test-btn" data-test="zoom">
+                    <i class="fas fa-video"></i>
+                    <span>Ouvrir Zoom</span>
+                </button>
+                
+                <button class="test-btn" data-test="meeting">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Réunion</span>
+                </button>
+                
+                <button class="test-btn" data-test="mail">
+                    <i class="fas fa-envelope"></i>
+                    <span>Ouvrir Mail</span>
+                </button>
+                
+                <button class="test-btn" data-test="control">
+                    <i class="fas fa-gamepad"></i>
+                    <span>Prendre contrôle</span>
+                </button>
+                
+                <button class="test-btn" data-test="full-test">
+                    <i class="fas fa-play-circle"></i>
+                    <span>Test complet</span>
+                </button>
+            </div>
+            
+            <div class="test-log" id="testLog">
+                <div class="log-entry info">Prêt pour les tests...</div>
+            </div>
+        </div>
+
+        <!-- Clavier virtuel -->
+        <div class="virtual-keyboard" id="virtualKeyboard">
+            <div class="keyboard-header">
+                <h3><i class="fas fa-keyboard"></i> Clavier Virtuel</h3>
+                <button class="close-keyboard" id="closeKeyboard">&times;</button>
+            </div>
+            <div class="keyboard-keys" id="keyboardKeys">
+                <!-- Les touches seront générées par JavaScript -->
+            </div>
+            <div class="keyboard-input">
+                <input type="text" id="keyboardInput" placeholder="Tapez avec votre voix...">
+                <button id="keyboardSend">↵</button>
+            </div>
+        </div>
+
+        <!-- Menu contextuel -->
+        <div class="context-menu" id="contextMenu">
+            <div class="menu-item" data-action="click">
+                <i class="fas fa-mouse-pointer"></i> Cliquer ici
+            </div>
+            <div class="menu-item" data-action="scroll-down">
+                <i class="fas fa-arrow-down"></i> Défiler vers le bas
+            </div>
+            <div class="menu-item" data-action="scroll-up">
+                <i class="fas fa-arrow-up"></i> Défiler vers le haut
+            </div>
+            <div class="menu-item" data-action="back">
+                <i class="fas fa-arrow-left"></i> Revenir en arrière
+            </div>
+            <div class="menu-item" data-action="select">
+                <i class="fas fa-check-square"></i> Sélectionner
+            </div>
+        </div>
+    </div>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+                .then(() => console.log('Service Worker enregistré'))
+                .catch(err => console.log('Erreur Service Worker:', err));
+        }
+    </script>
+
+    <!-- Script principal -->
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>VoiceControl Pro - Test Runner</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .btn { padding: 10px 14px; background:#00d4ff; color:#022; border:none; border-radius:6px; cursor:pointer }
+        pre { background:#0b0b12; color:#dfefff; padding:12px; border-radius:6px; max-height:400px; overflow:auto }
+        .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px; margin-top:12px }
+        .test-card { padding:12px; border-radius:8px; background:#111; color:#fff; cursor:pointer; text-align:center }
+        .test-card.success { box-shadow:0 0 0 3px rgba(0,255,136,0.12) }
+        .test-card.error { box-shadow:0 0 0 3px rgba(255,71,87,0.12) }
+    </style>
+</head>
+<body>
+    <h2>VoiceControl Pro — Tests Fonctionnels</h2>
+    <p>Utilisez les boutons pour lancer la batterie de tests ou tester des contrôles avancés.</p>
+
+    <div>
+        <button id="runAllBtn" class="btn">Lancer tous les tests</button>
+        <button id="testControlBtn" class="btn" style="background:#0077cc;margin-left:8px">Test contrôle avancé</button>
+        <button id="clearBtn" class="btn" style="background:#888;color:#fff;margin-left:8px">Effacer</button>
+    </div>
+
+    <div id="summaryContent" class="summary" style="margin-top:12px"></div>
+
+    <h3>Logs</h3>
+    <pre id="log">Prêt pour exécution des tests...</pre>
+
+    <h3 style="margin-top:18px">Tests rapides</h3>
+    <div class="grid" id="testsGrid">
+        <div class="test-card" data-test="introduce">Présentation</div>
+        <div class="test-card" data-test="zoom">Ouvrir Zoom</div>
+        <div class="test-card" data-test="meeting">Organiser réunion</div>
+        <div class="test-card" data-test="mail">Ouvrir Mail</div>
+        <div class="test-card" data-test="control">Prise contrôle</div>
+        <div class="test-card" data-test="screenshot">Capture écran</div>
+        <div class="test-card" data-test="navigation">Navigation</div>
+        <div class="test-card" data-test="full">Exécuter tous</div>
+    </div>
+
+    <!-- Charger l'app principale puis le runner de tests -->
+    <script src="script.js"></script>
+    <script src="functional_test_runner.js"></script>
+</body>
+</html>

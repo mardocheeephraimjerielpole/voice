@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>VoiceControl - Tests Fonctionnels Complets</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            padding: 20px; 
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .btn { 
+            padding: 12px 20px; 
+            background: linear-gradient(135deg, #00d4ff, #0099ff);
+            color: white; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.4);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #ff4757, #ff3838);
+        }
+        
+        pre { 
+            background: rgba(0, 0, 0, 0.3); 
+            color: #dfefff; 
+            padding: 20px; 
+            border-radius: 10px; 
+            max-height: 500px; 
+            overflow: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .summary { 
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .test-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .test-card:hover {
+            background: rgba(0, 212, 255, 0.2);
+            transform: translateY(-5px);
+        }
+        
+        .test-card.success {
+            border-color: #00ff88;
+        }
+        
+        .test-card.error {
+            border-color: #ff4757;
+        }
+        
+        .test-card i {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #00d4ff;
+        }
+        
+        h2, h3 {
+            color: #00d4ff;
+            margin-bottom: 20px;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-active {
+            background: #00ff88;
+            animation: pulse 1s infinite;
+        }
+        
+        .status-inactive {
+            background: #ff4757;
+        }
+    </style>
+</head>
+<body>
+    <h2><i class="fas fa-vial"></i> Tests Fonctionnels - VoiceControl Pro</h2>
+    <p>Cette page exécute des tests complets de toutes les fonctionnalités de VoiceControl Pro.</p>
+
+    <div>
+        <button id="runAllBtn" class="btn">
+            <i class="fas fa-play-circle"></i> Lancer tous les tests
+        </button>
+        <button id="clearBtn" class="btn btn-danger" style="margin-left:10px">
+            <i class="fas fa-trash"></i> Effacer les logs
+        </button>
+        <button id="testControlBtn" class="btn" style="margin-left:10px; background:linear-gradient(135deg, #ff9500, #ff7700)">
+            <i class="fas fa-gamepad"></i> Test contrôle avancé
+        </button>
+    </div>
+
+    <div class="test-grid">
+        <div class="test-card" data-test="introduce">
+            <i class="fas fa-robot"></i>
+            <h4>Présentation</h4>
+            <p>Test: "ok voice présente toi"</p>
+        </div>
+        
+        <div class="test-card" data-test="zoom">
+            <i class="fas fa-video"></i>
+            <h4>Ouvrir Zoom</h4>
+            <p>Test: "ok voice ouvre zoom"</p>
+        </div>
+        
+        <div class="test-card" data-test="meeting">
+            <i class="fas fa-calendar-check"></i>
+            <h4>Réunion</h4>
+            <p>Test: "ok voice organise réunion"</p>
+        </div>
+        
+        <div class="test-card" data-test="mail">
+            <i class="fas fa-envelope"></i>
+            <h4>Mail</h4>
+            <p>Test: "ok voice ouvre mail"</p>
+        </div>
+        
+        <div class="test-card" data-test="control">
+            <i class="fas fa-gamepad"></i>
+            <h4>Prise contrôle</h4>
+            <p>Test: "ok voice prends contrôle"</p>
+        </div>
+        
+        <div class="test-card" data-test="screenshot">
+            <i class="fas fa-camera"></i>
+            <h4>Capture écran</h4>
+            <p>Test: "ok voice screenshot"</p>
+        </div>
+        
+        <div class="test-card" data-test="navigation">
+            <i class="fas fa-compass"></i>
+            <h4>Navigation</h4>
+            <p>Test des commandes navigation</p>
+        </div>
+        
+        <div class="test-card" data-test="full">
+            <i class="fas fa-bolt"></i>
+            <h4>Test complet</h4>
+            <p>Toutes les fonctionnalités</p>
+        </div>
+    </div>
+
+    <div class="summary" id="summary">
+        <h3><i class="fas fa-chart-bar"></i> Résumé des tests</h3>
+        <div id="summaryContent">Prêt pour les tests...</div>
+    </div>
+    
+    <h3><i class="fas fa-terminal"></i> Log des tests</h3>
+    <pre id="log">Prêt pour exécution des tests...</pre>
+
+    <!-- Charger l'app principale puis le script de test -->
+    <script src="script.js"></script>
+    <script src="functional_test.js"></script>
+</body>
+</html>
